@@ -488,7 +488,7 @@
     </param>
     <param>
       <key>_io_cache</key>
-      <value>('Embedded Python Block', 'blk', [('example_param', '1.0')], [('0', 'complex', 1)], [('0', 'complex', 1)], 'Embedded Python Block example - a simple multiply const', ['example_param'])</value>
+      <value>('msg_block', 'msg_block', [], [('msg_in', 'message', 1)], [], '', [])</value>
     </param>
     <param>
       <key>_source_code</key>
@@ -504,8 +504,7 @@ import pmt
 import numpy as np
 from gnuradio import gr
 
-
- class msg_block(gr.basic_block):
+class msg_block(gr.basic_block):
      def __init__(self):
          gr.basic_block.__init__(
              self,
@@ -516,14 +515,13 @@ from gnuradio import gr
          self.message_port_register_in(pmt.intern('msg_in'))
          self.set_msg_handler(pmt.intern('msg_in'), self.handle_msg)
  
-     
      def handle_msg(self, msg):
-	if(pmt.is_tuple(msg)):
-		t = pmt.to_long(pmt.tuple_ref(msg, 0))
-		m = pmt.symbol_to_string(pmt.tuple_ref(msg, 1))
-		de = DataEvent([t, m])
-		song_file.write(de); 
-		del de
+         if(pmt.is_tuple(msg)):
+            t = pmt.to_long(pmt.tuple_ref(msg, 0))
+            m = pmt.symbol_to_string(pmt.tuple_ref(msg, 1))
+            de = DataEvent([t, m])
+            song_file.write(de); 
+            del de
 
 </value>
     </param>
@@ -536,12 +534,8 @@ from gnuradio import gr
       <value>True</value>
     </param>
     <param>
-      <key>example_param</key>
-      <value>1.0</value>
-    </param>
-    <param>
       <key>_coordinate</key>
-      <value>(1216, 260)</value>
+      <value>(1296, 264)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -2958,7 +2952,7 @@ we are using an audio decimation of 4
     <source_block_id>gr_rds_parser_0</source_block_id>
     <sink_block_id>epy_block_0</sink_block_id>
     <source_key>out</source_key>
-    <sink_key>0</sink_key>
+    <sink_key>msg_in</sink_key>
   </connection>
   <connection>
     <source_block_id>pfb_arb_resampler_xxx_0</source_block_id>

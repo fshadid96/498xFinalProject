@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Fm Radio Rds
-# Generated: Wed Dec  5 23:24:07 2018
+# Generated: Sun Dec 16 23:33:34 2018
 ##################################################
 
 from distutils.version import StrictVersion
@@ -31,6 +31,7 @@ from gnuradio.eng_option import eng_option
 from gnuradio.filter import firdes
 from gnuradio.filter import pfb
 from optparse import OptionParser
+import epy_block_0
 import osmosdr
 import rds
 import sip
@@ -136,10 +137,9 @@ class fm_radio_rds(gr.top_block, Qt.QWidget):
         self.pfb_arb_resampler_xxx_0.declare_sample_delay(0)
 
         self.gr_rds_parser_0 = rds.parser(False, True, 1)
-        self.gr_rds_panel_0 = rds.rdsPanel(0, self.GetWin())
-        self.Add(self.gr_rds_panel_0.panel)
         self.gr_rds_decoder_0 = rds.decoder(False, False)
         self.freq_xlating_fir_filter_xxx_1_0 = filter.freq_xlating_fir_filter_fcc(1, (firdes.low_pass(2500.0,250000,2.6e3,2e3,firdes.WIN_HAMMING)), 57e3, 250000)
+        self.epy_block_0 = epy_block_0.msg_block()
         self.digital_psk_demod_0 = digital.psk.psk_demod(
           constellation_points=2,
           differential=False,
@@ -152,7 +152,6 @@ class fm_radio_rds(gr.top_block, Qt.QWidget):
           log=False,
           )
         self.digital_diff_decoder_bb_0 = digital.diff_decoder_bb(2)
-        self.blocks_message_debug_0 = blocks.message_debug()
         self.blocks_keep_one_in_n_0 = blocks.keep_one_in_n(gr.sizeof_char*1, 2)
         self.analog_wfm_rcv_0_0 = analog.wfm_rcv(
         	quad_rate=samp_rate,
@@ -163,7 +162,7 @@ class fm_radio_rds(gr.top_block, Qt.QWidget):
         # Connections
         ##################################################
         self.msg_connect((self.gr_rds_decoder_0, 'out'), (self.gr_rds_parser_0, 'in'))
-        self.msg_connect((self.gr_rds_parser_0, 'out'), (self.gr_rds_panel_0, 'in'))
+        self.msg_connect((self.gr_rds_parser_0, 'out'), (self.epy_block_0, 'msg_in'))
         self.connect((self.analog_wfm_rcv_0_0, 0), (self.freq_xlating_fir_filter_xxx_1_0, 0))
         self.connect((self.blocks_keep_one_in_n_0, 0), (self.digital_diff_decoder_bb_0, 0))
         self.connect((self.digital_diff_decoder_bb_0, 0), (self.gr_rds_decoder_0, 0))
