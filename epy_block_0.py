@@ -11,21 +11,24 @@ import numpy as np
 from gnuradio import gr
 
 class msg_block(gr.basic_block):
-     def __init__(self):
-         gr.basic_block.__init__(
-             self,
-             name="msg_block",
-             in_sig=None,
-             out_sig=None)
-	 song_file = ("songs.txt", "w+")
-         self.message_port_register_in(pmt.intern('msg_in'))
-         self.set_msg_handler(pmt.intern('msg_in'), self.handle_msg)
- 
-     def handle_msg(self, msg):
-         if(pmt.is_tuple(msg)):
+    def __init__(self):
+        gr.basic_block.__init__(
+            self,
+            name="msg_block",
+            in_sig=None,
+            out_sig=None)
+
+        self.message_port_register_in(pmt.intern('msg_in'))
+        self.set_msg_handler(pmt.intern('msg_in'), self.handle_msg)
+
+    def handle_msg(self, msg):
+        f = open("songs.txt", "w")
+        if(pmt.is_tuple(msg)):
             t = pmt.to_long(pmt.tuple_ref(msg, 0))
             m = pmt.symbol_to_string(pmt.tuple_ref(msg, 1))
+            print("message:", m)
             de = DataEvent([t, m])
-            song_file.write(de); 
+            f.write(de,"w"); 
             del de
+        f.close()
 

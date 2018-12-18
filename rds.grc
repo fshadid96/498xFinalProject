@@ -155,7 +155,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -249,7 +249,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -325,37 +325,6 @@
     <param>
       <key>vlen</key>
       <value>1</value>
-    </param>
-  </block>
-  <block>
-    <key>blocks_message_debug</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(1488, 240)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>blocks_message_debug_0</value>
     </param>
   </block>
   <block>
@@ -505,23 +474,26 @@ import numpy as np
 from gnuradio import gr
 
 class msg_block(gr.basic_block):
-     def __init__(self):
-         gr.basic_block.__init__(
-             self,
-             name="msg_block",
-             in_sig=None,
-             out_sig=None)
-	 song_file = ("songs.txt", "w+")
-         self.message_port_register_in(pmt.intern('msg_in'))
-         self.set_msg_handler(pmt.intern('msg_in'), self.handle_msg)
- 
-     def handle_msg(self, msg):
-         if(pmt.is_tuple(msg)):
+    def __init__(self):
+        gr.basic_block.__init__(
+            self,
+            name="msg_block",
+            in_sig=None,
+            out_sig=None)
+
+        self.message_port_register_in(pmt.intern('msg_in'))
+        self.set_msg_handler(pmt.intern('msg_in'), self.handle_msg)
+
+    def handle_msg(self, msg):
+        f = open("songs.txt", "w")
+        if(pmt.is_tuple(msg)):
             t = pmt.to_long(pmt.tuple_ref(msg, 0))
             m = pmt.symbol_to_string(pmt.tuple_ref(msg, 1))
+            print("message:", m)
             de = DataEvent([t, m])
-            song_file.write(de); 
+            f.write(de,"w"); 
             del de
+        f.close()
 
 </value>
     </param>
@@ -802,7 +774,7 @@ class msg_block(gr.basic_block):
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1383,7 +1355,7 @@ we are using an audio decimation of 4
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>fbw</key>
